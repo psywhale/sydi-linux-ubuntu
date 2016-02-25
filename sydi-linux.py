@@ -189,60 +189,66 @@ def getTimezone():
 
 # Get Ubuntu Specifics
 def getUbuntuServices():
-	services = {}
-	retServices = []
-	services['all'] = os.listdir("/etc/init.d/")	
-#	os.open("service --status-all>/tmp/srv-stats")
-	services['exclude'] = []
-	for i in services['all']:
-		if i not in services['exclude'] and os.access("/etc/init.d/" + i, os.X_OK):
-			retServices.append({})
-			count = (len(retServices)-1)
-			startmode = "Auto"
-			started = "true"
-			runlevel = "2"
-			retServices[count]['name'] = i
-			retServices[count]['started'] = 'started'
-			retServices[count]['startmode'] = 'Auto'
-			retServices[count]['runlevel'] = '2'
-			retServices[count]['xml'] = '<service name="' + i + '" startmode="' + startmode + '"'
-			retServices[count]['xml'] += ' started="' + started + '" runlevel="' + runlevel + '" />'
-	return retServices
+    global roles
+    services = {}
+    roleDefines = {}
+    rolesDefines['database'] = ['mysqld','postgre']
+    rolesDefines['webserver'] = ['httpd','apache2','nginx']
+    retServices = []
+    services['all'] = os.listdir("/etc/init.d/")
+#   os.open("service --status-all>/tmp/srv-stats")
+    services['exclude'] = []
+    
+    for i in services['all']:
+    	if i not in services['exclude'] and os.access("/etc/init.d/" + i, os.X_OK):
+            if i 
+            retServices.append({})
+	    count = (len(retServices)-1)
+	    startmode = "Auto"
+	    started = "true"
+	    runlevel = "2"
+	    retServices[count]['name'] = i
+	    retServices[count]['started'] = 'started'
+	    retServices[count]['startmode'] = 'Auto'
+	    retServices[count]['runlevel'] = '2'
+	    retServices[count]['xml'] = '<service name="' + i + '" startmode="' + startmode + '"'
+	    retServices[count]['xml'] += ' started="' + started + '" runlevel="' + runlevel + '" />'
+    return retServices
 
 # Start Gentoo Specifics	
 def getDistGentooServices():
-	services = {}
-	retServices = []
-	services['all'] = os.listdir("/etc/init.d/")
-	services['boot'] = os.listdir("/etc/runlevels/boot/")
-	services['default'] = os.listdir("/etc/runlevels/default/")
-	services['started'] = os.listdir("/var/lib/init.d/started/")
-	services['exclude'] = ['reboot.sh', 'shutdown.sh', 'halt.sh', 'functions.sh', 'depscan.sh', 'runscript.sh']
-	services['all'].sort()
-	for i in services['all']:
-		if i not in services['exclude'] and os.access("/etc/init.d/" + i, os.X_OK):
-			retServices.append({})
-			count = (len(retServices)-1)
-			if i in services['started']:
-				started = "True"
-			else:
-				started = "False"
-			if i in services['boot']:
-				startmode = "Auto"
-				runlevel = "boot"
-			elif i in services['default']:
-				startmode = "Auto"
-				runlevel = "default"
-			else:
-				startmode = "Manual"
-				runlevel = "(none)"
-			retServices[count]['name'] = i
-			retServices[count]['started'] = started
-			retServices[count]['startmode'] = startmode
-			retServices[count]['runlevel'] = runlevel
-			retServices[count]['xml'] = '<service name="' + i + '" startmode="' + startmode + '"'
-			retServices[count]['xml'] += ' started="' + started + '" runlevel="' + runlevel + '" />'
-	return retServices
+    services = {}
+    retServices = []
+    services['all'] = os.listdir("/etc/init.d/")
+    services['boot'] = os.listdir("/etc/runlevels/boot/")
+    services['default'] = os.listdir("/etc/runlevels/default/")
+    services['started'] = os.listdir("/var/lib/init.d/started/")
+    services['exclude'] = ['reboot.sh', 'shutdown.sh', 'halt.sh', 'functions.sh', 'depscan.sh', 'runscript.sh']
+    services['all'].sort()
+    for i in services['all']:
+    	if i not in services['exclude'] and os.access("/etc/init.d/" + i, os.X_OK):
+    		retServices.append({})
+    		count = (len(retServices)-1)
+    		if i in services['started']:
+    			started = "True"
+    		else:
+    			started = "False"
+    		if i in services['boot']:
+    			startmode = "Auto"
+    			runlevel = "boot"
+    		elif i in services['default']:
+    			startmode = "Auto"
+			runlevel = "default"
+		else:
+			startmode = "Manual"
+			runlevel = "(none)"
+		retServices[count]['name'] = i
+		retServices[count]['started'] = started
+		retServices[count]['startmode'] = startmode
+		retServices[count]['runlevel'] = runlevel
+		retServices[count]['xml'] = '<service name="' + i + '" startmode="' + startmode + '"'
+		retServices[count]['xml'] += ' started="' + started + '" runlevel="' + runlevel + '" />'
+    return retServices
 
 def getDistGentooInstPkgs():
 	package = []
@@ -318,7 +324,7 @@ def writeXML(outputFile):
 	
 
 platform = ""
-
+roles = []
 if os.name == "posix":
 	# Running POSIX - good
 	if sys.platform == "linux2":
