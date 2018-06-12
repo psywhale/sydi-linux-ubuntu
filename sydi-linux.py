@@ -201,7 +201,6 @@ def getUbuntuServices():
     
     for i in services['all']:
     	if i not in services['exclude'] and os.access("/etc/init.d/" + i, os.X_OK):
-            if i 
             retServices.append({})
 	    count = (len(retServices)-1)
 	    startmode = "Auto"
